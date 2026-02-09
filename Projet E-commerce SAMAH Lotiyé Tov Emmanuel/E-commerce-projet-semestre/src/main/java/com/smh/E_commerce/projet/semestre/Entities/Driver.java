@@ -19,5 +19,5 @@ public class Driver extends Account {
     private String adresse;
 
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
-    private List<Order> order;
+    private List<Order> orders;
 }

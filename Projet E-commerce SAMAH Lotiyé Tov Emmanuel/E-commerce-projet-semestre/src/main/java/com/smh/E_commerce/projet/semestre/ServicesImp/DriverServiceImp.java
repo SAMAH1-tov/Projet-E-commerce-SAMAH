@@ -33,7 +33,7 @@ public class DriverServiceImp implements DriverService {
         driverFind.setPassword(driver.getPassword());
         driverFind.setUsername(driver.getUsername());
         driverFind.setAdresse(driver.getAdresse());
-        driverFind.setOrder(driver.getOrder());
+        driverFind.setOrders(driver.getOrders());
         Driver update = driverRepository.save(driverFind);
         return update;
     }
