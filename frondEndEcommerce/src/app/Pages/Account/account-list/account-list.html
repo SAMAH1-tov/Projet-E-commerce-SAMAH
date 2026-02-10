@@ -1,0 +1,37 @@
+<a class="btn btn-primary btn-lg mt-3 mb-2" href="create-accounts" role="button">Nouvel Account</a>
+
+<table class="table mt-4">
+  <thead>
+  <tr>
+    <th scope="col">Username</th>
+    <th scope="col">FirstName</th>
+    <th scope="col">LastName</th>
+    <th scope="col">Email</th>
+    <th scope="col">Phone</th>
+    <th scope="col">Action</th>
+  </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    @for (account of accounts; track account.id) {
+      <tr>
+        <td>{{ account.username }}</td>
+        <td>{{ account.firstName }}</td>
+        <td>{{ account.lastName }}</td>
+        <td>{{ account.email }}</td>
+        <td>{{ account.phone }}</td>
+        <td>
+          <div class="d-flex justify-content-center gap-3">
+            <a class="btn btn-warning btn-sm mt-3" (click)="updateAccount(account.id)" role="button">Modifier</a>
+            <a class="btn btn-danger btn-sm mt-3" href="" role="button" (click)="deleteAccount(account.id)" )>Supprimer</a>
+          </div>
+        </td>
+      </tr>
+    }
+
+    @empty {
+      <tr>
+        <td>aucun compte disponibles</td>
+      </tr>
+    }
+  </tbody>
+</table>
