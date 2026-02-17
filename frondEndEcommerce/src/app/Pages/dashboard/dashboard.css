@@ -1,0 +1,77 @@
+/* Dashboard Styles */
+.dashboard-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Stats Cards */
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Stats Cards Specific */
+.card.text-white .card-text {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.card.text-white .card-title {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.card.text-white small {
+  opacity: 0.8;
+}
+
+/* Chart Containers */
+.chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card.text-white .card-text {
+    font-size: 1.5rem;
+  }
+  
+  .chart-container {
+    height: 250px;
+  }
+}
+
+/* Custom scrollbar for dashboard */
+.p-3 {
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+}
+
+/* Smooth transitions */
+.row {
+  transition: all 0.3s ease;
+}
+
+/* Title styling */
+h2 {
+  color: #2c3e50;
+  font-weight: 600;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}

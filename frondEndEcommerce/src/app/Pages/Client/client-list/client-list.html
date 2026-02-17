@@ -1,1 +1,73 @@
-<p>client-list works!</p>
+<div class="d-flex flex-row w-100">
+  <app-nav-bar class="col col-3"></app-nav-bar>
+  <div class="col col-9" style="height: 100vh">
+    <app-side-bar></app-side-bar>
+    <div class="d-flex flex-row w-100 justify-content-between px-2 align-items-center" style="height: 70px">  
+      <h4 class="text-success fw-bold mb-4 mt-4">Listes de clients</h4>
+      <a class="btn btn-primary justify-content-center align-items-center" href="create-client" role="button"><img src="/icons/add-svgrepo-com.svg" alt="" width ="30px" height="30px" style="filter: invert(1);"></a>
+    </div>
+    <div class="col col-12 p-3">
+
+      <div class="input-group mb-3 mt-3 col col-6">
+        <input type="text" class="form-control" placeholder="Rechercher par nom, prénom ou email" aria-label="Rechercher un client" (keyup)="filterByName($event.target.value)">
+        <button class="btn btn-outline-secondary bg-success" type="button"><img src="/icons/search-svgrepo-com.svg" width ="30px" height="30px" style="filter: invert(1);"></button>
+      </div>
+      
+      <table class="table mt-4 table-bordered p-5">
+        <thead>
+        <tr>
+          <th scope="col">Prénom</th>
+          <th scope="col">Nom</th>
+          <th scope="col">Email</th>
+          <th scope="col">Téléphone</th>
+          <th scope="col">Localisation</th>
+          <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (client of filteredClients; track client.id) {
+            <tr>
+              <td>{{ client.firstName }}</td>
+              <td>{{ client.lastName }}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.phone }}</td>
+              <td>{{ client.localization }}</td>
+              <td>
+                <div class="d-flex justify-content-center gap-3">
+                  <a class="btn btn-warning btn-sm mt-3" (click)="updateClient(client.id)" role="button">
+                    <img src="/icons/edit-svgrepo-com.svg" width="16px" height="16px"> Modifier
+                  </a>
+                  <a class="btn btn-danger btn-sm mt-3" role="button" data-bs-toggle="modal" [attr.data-bs-target]="'#DeleteClient' + client.id">
+                    <img src="/icons/delete-svgrepo-com.svg" width="16px" height="16px"> Supprimer
+                  </a>
+                </div>
+              </td>
+            </tr>
+            <div class="modal fade" [id]="'DeleteClient' + client.id" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Voulez-vous vraiment supprimer le client {{ client.firstName }} {{ client.lastName }} ?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-danger" (click)="deleteClient(client.id)" data-bs-dismiss="modal">Supprimer</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          @empty {
+            <tr>
+              <td colspan="6">Aucun client disponible</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

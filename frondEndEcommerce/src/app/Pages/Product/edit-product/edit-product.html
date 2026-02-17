@@ -1,1 +1,54 @@
-<p>edit-product works!</p>
+<app-side-bar></app-side-bar>
+<div class="container w-100 col-10 justify-content-center pt-5 pb-5">
+  <a class="btn btn-primary justify-content-center align-items-center mb-4" href="product-list" role="button"><img src="/icons/return-svgrepo-com.svg" alt="" width ="30px" height="30px"> Retour à la liste</a>
+
+  <div class="card mb-3 justify-content-center">
+    <div class="row g-0">
+      <div class="col-md-4 align-items-center">
+        <img src="/image/afficheProd.jpg" class="img-fluid rounded-start" alt="produit" style="height: 100%">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body bg-info-subtle">
+          <h5 class="card-title">Modifier le produit</h5>
+          <div class="card-text">
+            <div class="container col-12 pt-4">
+              <form [formGroup]="form" (ngSubmit)="updateProduct()">
+                <div class="form-group">
+                    <div class="mb-3">
+                        <label for="ref" class="form-label">Référence :</label>
+                        <input type="text" class="form-control" formControlName="ref" placeholder="Entrez la référence du produit">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description :</label>
+                        <input type="text" class="form-control" formControlName="description" placeholder="Entrez la description du produit">
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Prix :</label>
+                        <input type="number" class="form-control" formControlName="price" placeholder="Entrez le prix du produit">
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantité :</label>
+                        <input type="number" class="form-control" formControlName="quantity" placeholder="Entrez la quantité du produit">
+                    </div>
+                    <div class="mb-3">
+                        <label for="url" class="form-label">Image du produit :</label>
+                        <input type="file" class="form-control"  formControlName="url_photo" (change)="onFileSelected($event)">
+                        <div class="mt-2">
+                          @if (previewUrl) {
+                            <img [src]="previewUrl" alt="Aperçu" width="200px">
+                          }
+                        </div>
+                    </div>
+                    <div class="mb-3 w-100 d-flex justify-content-center">
+                      <button type="submit" class="btn btn-primary btn-lg mt-3 mb-2 col-8">Mettre à jour le produit</button>
+                    </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,1 +1,119 @@
-<p>edit-provider works!</p>
+<app-side-bar></app-side-bar>
+<div class="container w-100 col-10 justify-content-center pt-5 pb-5">
+  
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+    </div>
+  } @else {
+    <a class="btn btn-primary justify-content-center align-items-center mb-4" href="provider-list" role="button">
+      <img src="/icons/return-svgrepo-com.svg" alt="" width="30px" height="30px"> Retour à la liste
+    </a>
+
+    <div class="card mb-3 justify-content-center">
+      <div class="row g-0">
+        <div class="col-md-4 align-items-center">
+          <img src="/image/afficheProd.jpg" class="img-fluid rounded-start" alt="fournisseur" style="height: 100%">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body bg-info-subtle">
+            <h5 class="card-title">Modifier le Fournisseur</h5>
+            <div class="card-text">
+              <div class="container col-12 pt-4">
+                <form [formGroup]="form" (ngSubmit)="updateProvider()">
+                  <div class="form-group">
+                    <!-- Informations Personnelles -->
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <label for="firstName" class="form-label">Prénom :</label>
+                        <input type="text" class="form-control" formControlName="firstName" placeholder="Entrez le prénom">
+                        <div *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched" class="text-danger">
+                          <small>Le prénom est requis</small>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="lastName" class="form-label">Nom :</label>
+                        <input type="text" class="form-control" formControlName="lastName" placeholder="Entrez le nom">
+                        <div *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched" class="text-danger">
+                          <small>Le nom est requis</small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Informations de Contact -->
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <label for="phone" class="form-label">Téléphone :</label>
+                        <input type="tel" class="form-control" formControlName="phone" placeholder="Entrez le numéro de téléphone">
+                        <div *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched" class="text-danger">
+                          <small>Le téléphone est requis</small>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">Email :</label>
+                        <input type="email" class="form-control" formControlName="email" placeholder="Entrez l'adresse email">
+                        <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="text-danger">
+                          <small *ngIf="form.get('email')?.errors?.['required']">L'email est requis</small>
+                          <small *ngIf="form.get('email')?.errors?.['email']">Veuillez entrer un email valide</small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Informations Compte -->
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <label for="username" class="form-label">Nom d'utilisateur :</label>
+                        <input type="text" class="form-control" formControlName="username" placeholder="Entrez le nom d'utilisateur">
+                        <div *ngIf="form.get('username')?.invalid && form.get('username')?.touched" class="text-danger">
+                          <small>Le nom d'utilisateur est requis</small>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="password" class="form-label">Mot de passe :</label>
+                        <input type="password" class="form-control" formControlName="password" placeholder="Entrez le mot de passe">
+                        <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched" class="text-danger">
+                          <small>Le mot de passe est requis</small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Informations Entreprise -->
+                    <div class="mb-3">
+                      <label for="company" class="form-label">Entreprise :</label>
+                      <input type="text" class="form-control" formControlName="company" placeholder="Entrez le nom de l'entreprise">
+                      <div *ngIf="form.get('company')?.invalid && form.get('company')?.touched" class="text-danger">
+                        <small>Le nom de l'entreprise est requis</small>
+                      </div>
+                    </div>
+
+                    <!-- Current Info Display -->
+                    <div class="alert alert-info mb-3">
+                      <h6>Informations actuelles :</h6>
+                      <small class="text-muted">
+                        <strong>ID:</strong> {{ provider?.id }}<br>
+                        <strong>Rôle:</strong> {{ provider?.role }}<br>
+                        <strong>Créé le:</strong> {{ provider?.id ? 'Fournisseur #' + provider.id : 'Nouveau' }}
+                      </small>
+                    </div>
+
+                    <div class="mb-3 w-100 d-flex justify-content-center gap-2">
+                      <button type="submit" class="btn btn-success btn-lg mt-3 mb-2 col-4" [disabled]="form.invalid">
+                        <img src="/icons/save-svgrepo-com.svg" width="20px" height="20px" style="filter: invert(1);"> Enregistrer
+                      </button>
+                      <a href="provider-list" class="btn btn-secondary btn-lg mt-3 mb-2 col-4">
+                        <img src="/icons/cancel-svgrepo-com.svg" width="20px" height="20px" style="filter: invert(1);"> Annuler
+                      </a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

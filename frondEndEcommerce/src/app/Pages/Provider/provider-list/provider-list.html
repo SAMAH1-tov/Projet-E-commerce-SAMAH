@@ -1,1 +1,94 @@
-<p>provider-list works!</p>
+<div class="d-flex flex-row w-100" style="height: 100vh">
+  <app-nav-bar class="col col-3"></app-nav-bar>
+  <div class="col col-9" style="height: 100vh">
+    <app-side-bar></app-side-bar>
+    <div class="d-flex flex-row w-100 justify-content-between px-2 align-items-center" style="height: 70px">  
+      <h4 class="text-success fw-bold mb-4 mt-4">Listes des Fournisseurs</h4>
+      <a class="btn btn-primary justify-content-center align-items-center" href="create-provider" role="button"><img src="/icons/add-svgrepo-com.svg" alt="" width="30px" height="30px" style="filter: invert(1);"></a>
+    </div>
+    
+    <!-- Search Form -->
+    <form action="" class="w-100 justify-content-center col col-9 px-4">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Rechercher par nom" aria-label="Rechercher par nom" (keyup)="filterByName($event.target.value)">
+            <button class="btn btn-outline-secondary bg-success" type="button"><img src="/icons/search-svgrepo-com.svg" width="30px" height="30px" style="filter: invert(1);"></button>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Rechercher par entreprise" aria-label="Rechercher par entreprise" (keyup)="filterByCompany($event.target.value)">
+            <button class="btn btn-outline-secondary bg-success" type="button"><img src="/icons/building-svgrepo-com.svg" width="30px" height="30px"></button>
+          </div>
+        </div>
+      </div>
+    </form>
+    
+    <!-- Provider Cards -->
+    <div class="col col-12 p-3">
+        <div class="container">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @for (provider of filteredProviders; track provider.id) {
+                  <div class="col">
+                    <div class="card h-100 bg-primary-subtle" style="width: 100%;">
+                      <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">{{ provider.company || 'Entreprise non spécifiée' }}</h6>
+                      </div>
+                      <img src="/icons/truck-svgrepo-com.svg" class="card-img-top p-3" alt="Provider" style="height: 120px; object-fit: contain; filter: invert(1);">
+                      <div class="card-body">
+                        <h5 class="card-title">{{ provider.firstName }} {{ provider.lastName }}</h5>
+                        <p class="card-text">
+                          <small class="text-muted">
+                            <i class="bi bi-envelope"></i> {{ provider.email }}<br>
+                            <i class="bi bi-telephone"></i> {{ provider.phone }}<br>
+                            <i class="bi bi-person"></i> {{ provider.username }}
+                          </small>
+                        </p>
+                        <div class="row row-cols-1 justify-content-center gap-1">
+                          <a class="btn btn-warning btn-sm" (click)="updateProvider(provider.id)" role="button">
+                            <img src="/icons/edit-svgrepo-com.svg" width="16px" height="16px"> Modifier
+                          </a>
+                          <a class="btn btn-danger btn-sm" role="button" data-bs-toggle="modal" [attr.data-bs-target]="'#DeleteProvider' + provider.id">
+                            <img src="/icons/delete-svgrepo-com.svg" width="16px" height="16px"> Supprimer
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Delete Confirmation Modal -->
+                  <div class="modal fade" [id]="'DeleteProvider' + provider.id" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Confirmation de suppression</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          Voulez-vous vraiment supprimer le fournisseur <strong>{{ provider.firstName }} {{ provider.lastName }}</strong> de l'entreprise <strong>{{ provider.company }}</strong> ?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                          <button type="button" class="btn btn-danger" (click)="deleteProvider(provider.id)" data-bs-dismiss="modal">Supprimer</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>   
+                  }
+                  @empty {
+                    <div class="col-12 text-center">
+                      <div class="alert alert-info">
+                        <h5>Aucun fournisseur disponible</h5>
+                        <p>Commencez par ajouter un nouveau fournisseur.</p>
+                        <a href="create-provider" class="btn btn-primary">
+                          <img src="/icons/add-svgrepo-com.svg" width="20px" height="20px" style="filter: invert(1);"> Ajouter un fournisseur
+                        </a>
+                      </div>
+                    </div>
+                  }
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

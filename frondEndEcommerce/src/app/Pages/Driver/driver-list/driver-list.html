@@ -1,1 +1,69 @@
-<p>driver-list works!</p>
+<div class="d-flex flex-row w-100">
+  <app-nav-bar class="col col-3"></app-nav-bar>
+  <div class="col col-9 " style="height: 100vh">
+    <app-side-bar></app-side-bar>
+    <div class="col col-12">
+      <a class="btn btn-primary btn-lg mt-3 mb-2 px-3" href="create-driver" role="button">Nouveau Chauffeur</a>
+      
+      <div class="input-group mb-3 mt-3 col col-6">
+        <input type="text" class="form-control" placeholder="Rechercher par nom, prénom ou email" aria-label="Rechercher un chauffeur" (keyup)="filterByName($event.target.value)">
+        <button class="btn btn-outline-secondary bg-success" type="button"><img src="/icons/search-svgrepo-com.svg" width ="30px" height="30px" style="filter: invert(1);"></button>
+      </div>
+      
+      <table class="table mt-4 table-bordered p-5">
+        <thead>
+        <tr>
+          <th scope="col">Username</th>
+          <th scope="col">FirstName</th>
+          <th scope="col">LastName</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Adresse</th>
+          <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody class="">
+          @for (driver of filteredDrivers; track driver.id) {
+            <tr>
+              <td>{{ driver.username }}</td>
+              <td>{{ driver.firstName }}</td>
+              <td>{{ driver.lastName }}</td>
+              <td>{{ driver.email }}</td>
+              <td>{{ driver.phone }}</td>
+              <td>{{ driver.adresse }}</td>
+              <td>
+                <div class="d-flex justify-content-center gap-3">
+                  <a class="btn btn-warning btn-sm mt-3" (click)="updateDriver(driver.id)" role="button">
+                    <img src="/icons/edit-svgrepo-com.svg" width="16px" height="16px"> Modifier
+                  </a>
+                  <a class="btn btn-danger btn-sm mt-3" role="button" data-bs-toggle="modal" [attr.data-bs-target]="'#DeleteDriver' + driver.id">
+                    <img src="/icons/delete-svgrepo-com.svg" width="16px" height="16px"> Supprimer
+                  </a>
+                </div>
+              </td>
+            </tr>
+            <div class="modal fade" [id]="'DeleteDriver' + driver.id" tabindex="-1" aria-hidden="true">
+              <div>
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="confirmDeleteLabel">Confirmation</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                      Voulez-vous vraiment supprimer le chauffeur {{ driver.username }} {{ driver.firstName }}?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                      <button type="button" class="btn btn-danger" (click)="deleteDriver(driver.id)" data-bs-dismiss="modal">Supprimer</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

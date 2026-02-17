@@ -1,0 +1,7 @@
+.nav-item:hover {
+  text-decoration: none;
+  background-color: #575757;
+  transition: all ease-in-out 0.3s;
+}
+
+

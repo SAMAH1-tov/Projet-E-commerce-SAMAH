@@ -1,0 +1,52 @@
+<div class="login-container">
+  <div class="card login-card">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Connexion</h2>
+      
+      <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input 
+            type="email" 
+            class="form-control" 
+            id="email" 
+            placeholder="Entrez votre email"
+            [(ngModel)]="email"
+            name="email"
+            required>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Mot de passe</label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="password" 
+            placeholder="Entrez votre mot de passe"
+            [(ngModel)]="password"
+            name="password"
+            required>
+        </div>
+
+        <div class="d-grid gap-2">
+          <button 
+            type="submit" 
+            class="btn btn-primary btn-lg"
+            [disabled]="isLoading">
+            {{ isLoading ? 'Connexion en cours...' : 'Se connecter' }}
+          </button>
+        </div>
+      </form>
+
+      <div class="text-center mt-3">
+        <p>Pas encore inscrit ? <a href="signUp" class="text-decoration-none">S'inscrire</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+

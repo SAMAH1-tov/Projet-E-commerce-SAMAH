@@ -1,1 +1,88 @@
-<p>subcategory-list works!</p>
+<div class="d-flex flex-row w-100" style="height: 100vh">
+  <app-nav-bar class="col col-3"></app-nav-bar>
+  <div class="col col-9" style="height: 100vh">
+    <app-side-bar></app-side-bar>
+    <div class="d-flex flex-row w-100 justify-content-between px-2 align-items-center" style="height: 70px">  
+      <h4 class="text-success fw-bold mb-4 mt-4">Listes de sous-catégories</h4>
+      <a class="btn btn-primary justify-content-center align-items-center" href="create-subcategory" role="button"><img src="/icons/add-svgrepo-com.svg" alt="" width ="30px" height="30px" style="filter: invert(1);"></a>
+    </div>
+    <form action="" class="w-100  justify-content-center col col-9 px-4">
+      <div class="input-group mb-3 col col-9">
+        <input type="text" class="form-control" placeholder="Rechercher une sous-catégorie par nom" aria-label="Rechercher une sous-catégorie" aria-describedby="button-addon2" (keyup)="filterByName($event.target.value)">
+        <button class="btn btn-outline-secondary bg-success" type="button" id="button-addon2"><img src="/icons/search-svgrepo-com.svg" width ="30px" height="30px" style="filter: invert(1);"></button>
+      </div>
+    </form>
+    <div class="col col-12 p-3">
+        <div class="container">
+            <!-- Loading State -->
+            @if (isLoading) {
+                <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Chargement...</span>
+                    </div>
+                </div>
+            } @else if (errorMessage) {
+                <!-- Error State -->
+                <div class="alert alert-danger text-center">
+                    <h5>Erreur de chargement</h5>
+                    <p>{{ errorMessage }}</p>
+                    <button class="btn btn-primary" (click)="loadSubcategories()">Réessayer</button>
+                </div>
+            } @else {
+                <!-- Normal State -->
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @for (subcategory of filteredSubcategories; track subcategory.id) {
+                  <div class="col">
+                    <div class="card bg-primary-subtle" style="width: 18rem;">
+                      <div class="card-body">
+                        <h5 class="card-title">{{subcategory.name}}</h5>
+                        <p class="card-text">{{subcategory.description}}</p>
+                        @if (subcategory.category) {
+                          <p class="card-text"><small class="text-muted">Catégorie: {{subcategory.category.name}}</small></p>
+                        }
+                        <div class="row row-cols-1 justify-content-center gap-1">
+                          <a class="btn btn-warning btn-sm mt-3" (click)="updateSubcategory(subcategory.id)" role="button">
+                            <img src="/icons/edit-svgrepo-com.svg" width="16px" height="16px"> Modifier
+                          </a>
+                          <a class="btn btn-danger btn-sm mt-3" role="button" data-bs-toggle="modal" [attr.data-bs-target]="'#DeleteSubcategory' + subcategory.id">
+                            <img src="/icons/delete-svgrepo-com.svg" width="16px" height="16px"> Supprimer
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal fade" [id]="'DeleteSubcategory' + subcategory.id" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Confirmation</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          Voulez-vous vraiment supprimer la sous-catégorie {{ subcategory.name }} ?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                          <button type="button" class="btn btn-danger" (click)="deleteSubcategory(subcategory.id)" data-bs-dismiss="modal">Supprimer</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>   
+                  }
+                  @empty {
+                    <div class="col-12 text-center">
+                        <div class="alert alert-info">
+                            <h5>Aucune sous-catégorie disponible</h5>
+                            <p>Commencez par ajouter une nouvelle sous-catégorie.</p>
+                            <a href="create-subcategory" class="btn btn-primary">
+                                <img src="/icons/add-svgrepo-com.svg" width="20px" height="20px" style="filter: invert(1);"> Ajouter une sous-catégorie
+                            </a>
+                        </div>
+                    </div>
+                  }
+                </div>
+            }
+        </div>
+    </div>
+  </div>
+</div>

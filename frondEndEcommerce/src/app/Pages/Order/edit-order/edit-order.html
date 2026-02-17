@@ -1,1 +1,57 @@
-<p>edit-order works!</p>
+<app-side-bar></app-side-bar>
+<div class="container w-100 col-10 justify-content-center pt-5 pb-5">
+  
+  <a class="btn btn-primary justify-content-center align-items-center mb-4" href="order-list" role="button"><img src="/icons/return-svgrepo-com.svg" alt="" width ="30px" height="30px"> Retour à la liste</a>
+
+  <div class="card mb-3 justify-content-center">
+    <div class="row g-0">
+      <div class="col-md-4 align-items-center">
+        <img src="/image/afficheProd.jpg" class="img-fluid rounded-start" alt="commande" style="height: 100%">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body bg-info-subtle">
+          <h5 class="card-title">Modifier une commande</h5>
+          <div class="card-text">
+            <div class="container col-12 pt-4">
+              <form [formGroup]="form" (ngSubmit)="updateOrder()">
+                <div class="form-group">
+                    <div class="mb-3">
+                        <label for="ref" class="form-label">Référence :</label>
+                        <input type="text" class="form-control" formControlName="ref" placeholder="Entrez la référence">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description :</label>
+                        <textarea class="form-control" formControlName="description" placeholder="Entrez la description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity_total" class="form-label">Quantité :</label>
+                        <input type="number" class="form-control" formControlName="quantity_total" placeholder="Entrez la quantité">
+                    </div>
+                    <div class="mb-3">
+                        <label for="price_total" class="form-label">Prix Total :</label>
+                        <input type="number" step="0.01" class="form-control" formControlName="price_total" placeholder="Entrez le prix total">
+                    </div>
+                    <div class="mb-3">
+                        <label for="state" class="form-label">État :</label>
+                        <select class="form-control" formControlName="state">
+                            <option value="">Sélectionnez un état</option>
+                            <option value="PENDING">En attente</option>
+                            <option value="PROCESSING">En traitement</option>
+                            <option value="SHIPPED">Expédié</option>
+                            <option value="DELIVERED">Livré</option>
+                            <option value="CANCELLED">Annulé</option>
+                        </select>
+                    </div>
+                  <div class="mb-3 w-100 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-lg mt-3 mb-2 col-8">Modifier la commande</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

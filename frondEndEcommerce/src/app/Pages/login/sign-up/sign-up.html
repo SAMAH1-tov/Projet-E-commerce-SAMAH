@@ -1,0 +1,132 @@
+<div class="register-container">
+  <div class="card register-card">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">S'inscrire</h2>
+      
+      <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="successMessage" class="alert alert-success" role="alert">
+        {{ successMessage }}
+      </div>
+
+      <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label for="firstName" class="form-label">Prénom</label>
+            <input
+              type="text"
+              class="form-control"
+              id="firstName"
+              placeholder="Entrez votre prénom"
+              [(ngModel)]="firstName"
+              name="firstName"
+              required>
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="lastName" class="form-label">Nom</label>
+            <input
+              type="text"
+              class="form-control"
+              id="lastName"
+              placeholder="Entrez votre nom"
+              [(ngModel)]="lastName"
+              name="lastName"
+              required>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label for="username" class="form-label">Nom d'utilisateur</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              placeholder="Choisissez un nom d'utilisateur"
+              [(ngModel)]="username"
+              name="username"
+              required>
+          </div>
+
+          <div class="mb-3 col-md-6">
+            <label for="phone" class="form-label">Téléphone</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="phone"
+              placeholder="Ex: +213512345678"
+              [(ngModel)]="phone"
+              name="phone">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="localization" class="form-label">Localité</label>
+          <input
+            type="text"
+            class="form-control"
+            id="localization"
+            placeholder="Entrez votre localité"
+            [(ngModel)]="localization"
+            name="localization"
+            required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input 
+            type="email" 
+            class="form-control" 
+            id="email" 
+            placeholder="Entrez votre email"
+            [(ngModel)]="email"
+            name="email"
+            required>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Mot de passe</label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="password" 
+            placeholder="Entrez votre mot de passe (min. 6 caractères)"
+            [(ngModel)]="password"
+            name="password"
+            required>
+        </div>
+
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
+          <input 
+            type="password" 
+            class="form-control" 
+            id="confirmPassword" 
+            placeholder="Confirmez votre mot de passe"
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            required>
+        </div>
+
+        <div class="d-grid gap-2">
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg"
+            [disabled]="isLoading || registerForm.invalid || password !== confirmPassword">
+            {{ isLoading ? 'Inscription en cours...' : 'S\'inscrire' }}
+          </button>
+          <div *ngIf="password !== confirmPassword && confirmPassword" class="text-danger small mt-2">
+            Les mots de passe ne correspondent pas.
+          </div>
+        </div>
+      </form>
+
+      <div class="text-center mt-3">
+        <p>Vous avez déjà un compte ? <a href="signIn" class="text-decoration-none">Se connecter</a></p>
+      </div>
+    </div>
+  </div>
+</div>

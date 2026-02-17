@@ -1,0 +1,32 @@
+<div class="sticky-top w-100">
+    <nav class="navbar bg-success mb-3">
+        <div class="w-100 d-flex justify-content-end px-2 col-12" style="min-height: 50px;max-height: 60px;">
+            <div class="d-flex col col-4 align-items-center rounded-3 border border-white border-1 px-3 py-1 bg-dark">
+                <div *ngIf="currentUser" class="d-flex align-items-center w-100">
+                    <div class="col col-4 rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white fw-bold" 
+                         style="height: 40px; width: 40px; font-size: 14px;">
+                        {{ getInitials() }}
+                    </div>
+                    <div class="col col-8 ms-2">
+                        <div class="col-md-4 fs-6 text-white fw-bold">
+                            {{ currentUser.firstName || 'Utilisateur' }} {{ currentUser.lastName || '' }}
+                        </div>
+                        <div class="col-md-4 fs-7 text-secondary">
+                            {{ currentUser.email || 'email@exemple.com' }}
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!currentUser" class="d-flex align-items-center w-100">
+                    <img src="../../../../../public/image/PP.jpg" class="col col-4 rounded-circle" alt="Default Avatar">
+                    <div class="col col-8">
+                        <div class="col-md-4 fs-4 text-white">Me</div>
+                        <div class="col-md-4 fs-6 text-white">Me</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<router-outlet />
+
+

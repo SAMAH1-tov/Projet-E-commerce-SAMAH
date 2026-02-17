@@ -1,1 +1,70 @@
-<p>product-list works!</p>
+<div class="d-flex flex-row w-100" style="height: 100vh">
+  <app-nav-bar class="col col-3"></app-nav-bar>
+  <div class="col col-9" style="height: 100vh">
+    <app-side-bar></app-side-bar>
+    <div class="d-flex flex-row w-100 justify-content-between px-2 align-items-center" style="height: 70px">  
+      <h4 class="text-success fw-bold mb-4 mt-4">Listes de produits</h4>
+      <a class="btn btn-primary justify-content-center align-items-center" href="create-product" role="button"><img src="/icons/add-svgrepo-com.svg" alt="" width ="30px" height="30px" style="filter: invert(1);"></a>
+    </div>
+    <form action="" class="w-100  justify-content-center col col-9 px-4">
+      <div class="input-group mb-3 col col-9">
+        <input type="text" class="form-control" placeholder="Rechercher un produit par référence" aria-label="Rechercher un produit" aria-describedby="button-addon2" (keyup)="filterByRef($event.target.value)">
+        <button class="btn btn-outline-secondary bg-success" type="button" id="button-addon2"><img src="/icons/search-svgrepo-com.svg" width ="30px" height="30px" style="filter: invert(1);"></button>
+      </div>
+    </form>
+    <div class="col col-12 p-3">
+      <div class="container">
+        <div class="row row row-cols-2 justify-content-center">
+            @for (product of filteredProducts; track product.id) {
+              <div class="col">
+                  <div class="card bg-primary-subtle" style="width: 18rem;">
+                    <img src="http://localhost:8080{{product.gallery.url_photo}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">{{product.ref}}</h5>
+                      <p class="card-text">{{product.description}}</p>
+                      <a href="#" class="btn btn-primary">{{product.price}} FCFA  ({{product.quantity}})</a>
+                      <div class="row row row-cols-1 justify-content-center gap-1">
+                        <a class="btn btn-warning btn-sm mt-3" (click)="updateProduct(product.id)" role="button">
+                          <img src="/icons/edit-svgrepo-com.svg" width="16px" height="16px"> Modifier
+                        </a>
+                        <a class="btn btn-danger btn-sm mt-3" role="button" data-bs-toggle="modal" [attr.data-bs-target]="'#DeleteProduct' + product.id">
+                          <img src="/icons/delete-svgrepo-com.svg" width="16px" height="16px"> Supprimer
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            <div class="modal fade" [id]="'DeleteProduct' + product.id" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Voulez-vous vraiment supprimer le produit {{ product.ref }} ?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-danger" (click)="deleteProduct(product.id)" data-bs-dismiss="modal">Supprimer</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+                
+              }
+              
+              @empty {
+                
+                aucun produit disponibles
+              }
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

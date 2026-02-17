@@ -3,7 +3,7 @@ import {Product} from './product';
 import {Driver} from './driver';
 
 export class Order {
-  id: string;
+  id: number;
   ref: string;
   description: string;
   quantity_total: number;

@@ -1,1 +1,57 @@
-<p>create-client works!</p>
+<app-side-bar></app-side-bar>
+<div class="container w-100 col-10 justify-content-center pt-5 pb-5">
+  
+  <a class="btn btn-primary justify-content-center align-items-center mb-4" href="client-list" role="button"><img src="/icons/return-svgrepo-com.svg" alt="" width ="30px" height="30px"> Retour à la liste</a>
+
+  <div class="card mb-3 justify-content-center">
+    <div class="row g-0">
+      <div class="col-md-4 align-items-center">
+        <img src="/image/afficheProd.jpg" class="img-fluid rounded-start" alt="client" style="height: 100%">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body bg-info-subtle">
+          <h5 class="card-title">Ajouter un nouveau client</h5>
+          <div class="card-text">
+            <div class="container col-12 pt-4">
+              <form [formGroup]="form" (ngSubmit)="createClient()">
+                <div class="form-group">
+                  <div class="mb-3">
+                    <label for="lastName" class="form-label">Nom :</label>
+                    <input type="text" class="form-control" formControlName="lastName" placeholder="Entrez le nom du client">
+                  </div>
+                  <div class="mb-3">
+                    <label for="firstName" class="form-label">Prénom :</label>
+                    <input type="text" class="form-control" formControlName="firstName" placeholder="Entrez le prénom du client">
+                  </div>
+                  <div class="mb-3">
+                    <label for="username" class="form-label">Nom d'utilisateur :</label>
+                    <input type="text" class="form-control" formControlName="username" placeholder="Entrez le nom d'utilisateur">
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email :</label>
+                    <input type="email" class="form-control" formControlName="email" placeholder="Entrez l'email">
+                  </div>
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Téléphone :</label>
+                    <input type="text" class="form-control" formControlName="phone" placeholder="Entrez le téléphone">
+                  </div>
+                  <div class="mb-3">
+                    <label for="localization" class="form-label">Localisation :</label>
+                    <input type="text" class="form-control" formControlName="localization" placeholder="Entrez la localisation">
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe :</label>
+                    <input type="password" class="form-control" formControlName="password" placeholder="Entrez le mot de passe">
+                  </div>
+                  <div class="mb-3 w-100 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary btn-lg mt-3 mb-2 col-8">Ajouter un client</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

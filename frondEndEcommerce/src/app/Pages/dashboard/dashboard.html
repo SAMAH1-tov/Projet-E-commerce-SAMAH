@@ -1,12 +1,57 @@
-<div >
-  <div class="p-3">
-    <div class="row">
-      <div class="col-sm-4 mb-3 mb-sm-0">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+<div class="d-flex flex-row w-100" style="height: 100vh">
+  <app-nav-bar class="col col-3"></app-nav-bar>
+  <div class="col col-9">
+    <app-side-bar></app-side-bar>
+    <div class="p-3">
+      <h2 class="mb-4">Tableau de Bord E-commerce</h2>
+      
+      <!-- Stats Cards -->
+      <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+          <div class="card text-white bg-primary">
+            <div class="card-body">
+              <h5 class="card-title">Ventes Totales</h5>
+              <h3 class="card-text">{{ totalSales }} FCFA</h3>
+              <small>+{{ monthlyGrowth }}% ce mois</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card text-white bg-success">
+            <div class="card-body">
+              <h5 class="card-title">Nouveaux Clients</h5>
+              <h3 class="card-text">{{ totalClients }}</h3>
+              <small>+8% ce mois</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card text-white bg-info">
+            <div class="card-body">
+              <h5 class="card-title">Commandes</h5>
+              <h3 class="card-text">{{ totalOrders }}</h3>
+              <small>+15% ce mois</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card text-white bg-warning">
+            <div class="card-body">
+              <h5 class="card-title">Taux de Satisfaction</h5>
+              <h3 class="card-text">{{ satisfactionRate }}%</h3>
+              <small>+2% ce mois</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row 2 -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType" style="height: 300px;"></canvas>
+            </div>
           </div>
         </div>
       </div>
