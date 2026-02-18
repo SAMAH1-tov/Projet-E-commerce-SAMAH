@@ -28,7 +28,7 @@ import { SubcategoryList } from './Pages/SubCategory/subcategory-list/subcategor
 
 export const routes: Routes = [
 
-  { path:"signIn",component:SignIn },
+  { path:"",component:SignIn },
   { path:"signUp",component:SignUp },
 
   { path:"dashboard",component:Dashboard},
