@@ -34,10 +34,15 @@ export class SignIn {
 
     this.authService.login(credentials).subscribe({
       next: (response: any) => {
+        console.log('Login response in component:', response);
         if (response.token) {
-          this.authService.saveToken(response.token);
+          console.log('Token received, navigating to dashboard...');
           this.router.navigate(['dashboard']);
+        } else {
+          console.error('No token in response');
+          this.errorMessage = 'Erreur lors de la connexion';
         }
+        this.isLoading = false;
       },
       error: (error: any) => {
         this.errorMessage = error.error?.message || 'Email ou mot de passe incorrect';

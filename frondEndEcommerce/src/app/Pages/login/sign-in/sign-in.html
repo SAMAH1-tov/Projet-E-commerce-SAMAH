@@ -1,7 +1,7 @@
 <div class="login-container">
-  <div class="card login-card">
+  <div class="card login-card bg-dark">
     <div class="card-body">
-      <h2 class="card-title text-center mb-4">Connexion</h2>
+      <h2 class="card-title text-center mb-4 text-white">Connexion</h2>
       
       <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
         {{ errorMessage }}
@@ -9,7 +9,7 @@
 
       <form (ngSubmit)="onLogin()" #loginForm="ngForm">
         <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
+          <label for="email" class="form-label text-white">Email</label>
           <input 
             type="email" 
             class="form-control" 
@@ -21,7 +21,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="password" class="form-label">Mot de passe</label>
+          <label for="password" class="form-label text-white">Mot de passe</label>
           <input 
             type="password" 
             class="form-control" 

@@ -15,8 +15,12 @@ export class AuthService {
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/authenticate`, credentials).pipe(
       tap((response: any) => {
+        console.log('Login response:', response);
         if (response && response.token) {
           this.saveToken(response.token);
+          console.log('Access token saved:', response.token);
+        } else {
+          console.error('No token in login response');
         }
       })
     );
@@ -27,11 +31,15 @@ export class AuthService {
   }
 
   saveToken(token: string): void {
+    console.log('Saving token to localStorage:', token);
     localStorage.setItem('authToken', token);
+    console.log('Token saved. Verifying:', localStorage.getItem('authToken'));
   }
 
   getToken(): string | null {
-    return localStorage.getItem('authToken');
+    const token = localStorage.getItem('authToken');
+    console.log('Retrieving token from localStorage:', token);
+    return token;
   }
 
   logout(): void {
@@ -40,6 +48,26 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!this.getToken();
+  }
+
+  isTokenExpired(): boolean {
+    const token = this.getToken();
+    if (!token) {
+      return true;
+    }
+    
+    try {
+      const decoded = this.getCurrentUser();
+      if (!decoded || !decoded.exp) {
+        return true;
+      }
+      
+      const currentTime = Math.floor(Date.now() / 1000);
+      return decoded.exp < currentTime;
+    } catch (error) {
+      console.error('Error checking token expiration:', error);
+      return true;
+    }
   }
 
   getCurrentUser(): any {

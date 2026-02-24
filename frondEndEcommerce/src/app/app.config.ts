@@ -9,9 +9,12 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-  
     provideHttpClient(withInterceptorsFromDi()),
-
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, provideCharts(withDefaultRegisterables())
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+    provideCharts(withDefaultRegisterables())
   ]
 };
