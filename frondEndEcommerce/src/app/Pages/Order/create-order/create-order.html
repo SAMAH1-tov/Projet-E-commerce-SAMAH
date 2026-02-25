@@ -84,7 +84,7 @@
                     <select class="form-control" formControlName="productId" (change)="calculateTotals()">
                       <option value="">-- Sélectionnez un produit --</option>
                       <option *ngFor="let product of products" [value]="product.id">
-                        {{ product.ref }} (Stock: {{ product.quantity || 0 }})
+                        {{ product.ref || product.description || ('Produit #' + product.id) }} (Stock: {{ product.quantity || 0 }})
                       </option>
                     </select>
                   </td>

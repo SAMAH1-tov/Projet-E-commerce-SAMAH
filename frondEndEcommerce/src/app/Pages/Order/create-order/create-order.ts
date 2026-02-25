@@ -49,6 +49,7 @@ export class CreateOrder implements OnInit {
     this.loadClients();
     this.loadDrivers();
     this.initForm();
+    this.addProduct();
   }
 
   loadProducts(): void {
@@ -57,6 +58,7 @@ export class CreateOrder implements OnInit {
       next: (data: Product[]) => {
         console.log('Products loaded:', data);
         this.products = data;
+        this.cdRef.detectChanges();
       },
       error: (error: any) => {
         console.error('Error loading products:', error);
@@ -125,7 +127,7 @@ export class CreateOrder implements OnInit {
     let totalPrice = 0;
 
     this.formProducts.controls.forEach((control, index) => {
-      const productId = control.get('productId')?.value;
+      const productId = Number(control.get('productId')?.value);
       const quantity = control.get('quantity')?.value || 1;
       
       const selectedProduct = this.products.find(p => p.id === productId);
@@ -153,7 +155,7 @@ export class CreateOrder implements OnInit {
 
     const productsData: any[] = [];
     this.formProducts.controls.forEach((control, index) => {
-      const productId = control.get('productId')?.value;
+      const productId = Number(control.get('productId')?.value);
       const quantity = control.get('quantity')?.value;
       const selectedProduct = this.products.find(p => p.id === productId);
       

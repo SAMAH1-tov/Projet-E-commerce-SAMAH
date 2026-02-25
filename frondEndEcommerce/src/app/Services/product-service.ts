@@ -17,8 +17,33 @@ export class ProductService {
   private http = inject(HttpClient);
 
   findAll(): Observable<Array<Product>> {
+    console.log('Fetching products from:', API_URL + "findAll");
     return this.http.get<Array<Product>>(API_URL + "findAll").pipe(
-      catchError((error: HttpErrorResponse) => this.handleError(error))
+      catchError((error: HttpErrorResponse) => {
+        console.error('Product Service Error:', error);
+        console.error('Error status:', error.status);
+        console.error('Error message:', error.message);
+        console.error('Error error:', error.error);
+        
+        if (error.status === 200 && error.error instanceof Error) {
+          console.error('Response parsing error:', error.error);
+          return throwError(() => new Error('Erreur de parsing de la réponse du serveur'));
+        }
+        
+        if (error.status === 0) {
+          console.error('Network error - CORS or server unavailable');
+          return throwError(() => new Error('Erreur réseau: Impossible de contacter le serveur'));
+        }
+        
+        let errorMessage = 'Une erreur est survenue lors du chargement des produits';
+        if (error.error instanceof ErrorEvent) {
+          errorMessage = `Erreur client: ${error.error.message}`;
+        } else if (error.status) {
+          errorMessage = `Erreur serveur (${error.status}): ${error.message || 'Erreur inconnue'}`;
+        }
+        
+        return throwError(() => new Error(errorMessage));
+      })
     );
   }
 
