@@ -60,4 +60,9 @@ public class ClientServiceImp implements ClientService {
         Client clientFind = clientRepository.findById(id).orElse(null);
         return clientFind;
     }
+
+    public String findName(long id) {
+        Client clientFind = clientRepository.findById(id).orElse(null);
+        return clientFind.getRealUsername();
+    }
 }

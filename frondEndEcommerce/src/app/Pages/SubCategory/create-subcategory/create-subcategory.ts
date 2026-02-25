@@ -23,6 +23,8 @@ export class CreateSubcategory implements OnInit {
   subcategory: SubCategory;
   form: FormGroup;
   categories: Category[] = [];
+  isLoading: boolean = false;
+  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -34,10 +36,9 @@ export class CreateSubcategory implements OnInit {
 
   initForm(): void {
     this.form = this.fb.group({
-      name: [null, Validators.required],
-      description: [null, Validators.required],
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      description: ['', [Validators.required, Validators.minLength(5)]],
       category: [null, Validators.required]
-
     });
   }
 
@@ -51,39 +52,56 @@ export class CreateSubcategory implements OnInit {
     this.categoryService.findAll().subscribe({
       next: (data: Category[]) => {
         this.categories = data;
+        console.log('Categories loaded:', data);
       },
-      error: (err: any) => console.error('Erreur lors du chargement des catégories', err)
+      error: (err: any) => {
+        console.error('Erreur lors du chargement des catégories', err);
+        this.errorMessage = 'Erreur lors du chargement des catégories';
+      }
     });
   }
 
   createSubcategory(): void {
     if (this.form.invalid) {
-      console.error('Formulaire invalide');
+      this.errorMessage = 'Veuillez remplir tous les champs correctement';
       return;
     }
 
+    this.isLoading = true;
+    this.errorMessage = '';
+
     const subcategory = new SubCategory();
-    subcategory.name = this.form.get('name')?.value;
-    subcategory.description = this.form.get('description')?.value;
+    subcategory.name = this.form.get('name')?.value.trim();
+    subcategory.description = this.form.get('description')?.value.trim();
     
     // Récupérer l'ID de la catégorie sélectionnée
     const categoryId = this.form.get('category')?.value;
     if (categoryId) {
-      // Trouver l'objet Category correspondant
-      subcategory.category = this.categories.find(cat => cat.id == categoryId) || null;
+      // Créer un objet Category avec juste l'ID pour le backend
+      const selectedCategory = new Category();
+      selectedCategory.id = categoryId;
+      subcategory.category = selectedCategory;
     }
 
     console.log('Creating subcategory payload:', subcategory);
 
     this.subcategoryService.save(subcategory).subscribe({
-      next: () => {
-        console.log('Sous-catégorie créée avec succès');
+      next: (response) => {
+        console.log('Subcategory created successfully:', response);
+        this.isLoading = false;
         this.router.navigate(['subcategory-list']);
       },
       error: (error: any) => {
-        console.error('erreur de création de la sous-catégorie', error);
-        // Afficher un message d'erreur à l'utilisateur si nécessaire
+        console.error('Erreur de création de la sous-catégorie', error);
+        this.isLoading = false;
+        this.errorMessage = 'Erreur lors de la création de la sous-catégorie';
       }
     });
+  }
+
+  // Helper pour vérifier les erreurs de formulaire
+  hasError(controlName: string, errorType: string): boolean {
+    const control = this.form.get(controlName);
+    return control ? control.hasError(errorType) && control.touched : false;
   }
 }

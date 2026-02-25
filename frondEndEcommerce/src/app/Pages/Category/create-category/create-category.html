@@ -1,7 +1,9 @@
 <app-side-bar></app-side-bar>
 <div class="container w-100 col-10 justify-content-center pt-5 pb-5">
   
-  <a class="btn btn-primary justify-content-center align-items-center mb-4" href="category-list" role="button"><img src="/icons/return-svgrepo-com.svg" alt="" width ="30px" height="30px"> Retour à la liste</a>
+  <a class="btn btn-primary justify-content-center align-items-center mb-4" href="category-list" role="button">
+    <img src="/icons/return-svgrepo-com.svg" alt="" width="30px" height="30px"> Retour à la liste
+  </a>
 
   <div class="card mb-3 justify-content-center">
     <div class="row g-0">
@@ -13,18 +15,57 @@
           <h5 class="card-title">Ajouter une catégorie</h5>
           <div class="card-text">
             <div class="container col-12 pt-4">
+              <!-- Message d'erreur -->
+              <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+                {{ errorMessage }}
+              </div>
+
               <form [formGroup]="form" (ngSubmit)="createCategory()">
                 <div class="form-group">
                     <div class="mb-3">
                         <label for="name" class="form-label">Nom de la catégorie :</label>
-                        <input type="text" class="form-control" formControlName="name_cat" placeholder="Entrez le nom de la catégorie">
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          formControlName="name_cat" 
+                          placeholder="Entrez le nom de la catégorie"
+                          [class.is-invalid]="hasError('name_cat', 'required') || hasError('name_cat', 'minlength')"
+                        >
+                        <div class="invalid-feedback" *ngIf="hasError('name_cat', 'required')">
+                          Le nom de la catégorie est requis
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError('name_cat', 'minlength')">
+                          Le nom doit contenir au moins 2 caractères
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description :</label>
-                        <input type="text" class="form-control" formControlName="description_cat" placeholder="Entrez la description de la catégorie">
+                        <textarea 
+                          class="form-control" 
+                          formControlName="description_cat" 
+                          placeholder="Entrez la description de la catégorie"
+                          rows="3"
+                          [class.is-invalid]="hasError('description_cat', 'required') || hasError('description_cat', 'minlength')"
+                        ></textarea>
+                        <div class="invalid-feedback" *ngIf="hasError('description_cat', 'required')">
+                          La description est requise
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError('description_cat', 'minlength')">
+                          La description doit contenir au moins 5 caractères
+                        </div>
                     </div>
                   <div class="mb-3 w-100 d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary btn-lg mt-3 mb-2 col-8">Ajouter une catégorie</button>
+                    <button 
+                      type="submit" 
+                      class="btn btn-primary btn-lg mt-3 mb-2 col-8"
+                      [disabled]="form.invalid || isLoading"
+                    >
+                      <span *ngIf="!isLoading">Ajouter une catégorie</span>
+                      <span *ngIf="isLoading">
+                        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        Création en cours...
+                      </span>
+                    </button>
                   </div>
                 </div>
               </form>

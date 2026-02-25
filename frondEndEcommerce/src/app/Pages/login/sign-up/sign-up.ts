@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../Services/auth-service';
 import { CommonModule } from '@angular/common';
+import { EncryptionService } from '../../../Services/encryption-service';
 
 @Component({
   selector: 'app-sign-up',
@@ -23,7 +24,7 @@ export class SignUp {
   successMessage: string = '';
   isLoading: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private encryptionService: EncryptionService) {}
 
   onRegister(): void {
     if (!this.email || !this.password || !this.confirmPassword || !this.firstName || !this.lastName || !this.username || !this.localization) {
@@ -45,9 +46,12 @@ export class SignUp {
     this.errorMessage = '';
     this.successMessage = '';
 
+    // Crypter le mot de passe avant de l'envoyer
+    const encryptedPassword = this.encryptionService.encryptPassword(this.password);
+
     const credentials = {
       email: this.email,
-      password: this.password,
+      password: encryptedPassword, // Mot de passe crypté
       username: this.username,
       phone: this.phone,
       firstName: this.firstName,
@@ -55,6 +59,11 @@ export class SignUp {
       localization: this.localization,
       role: 'CLIENT'
     };
+
+    console.log('Registering with encrypted password:', {
+      ...credentials,
+      password: '[ENCRYPTED]' // Masquer le mot de passe crypté dans les logs
+    });
 
     this.authService.register(credentials).subscribe({
       next: (response: any) => {

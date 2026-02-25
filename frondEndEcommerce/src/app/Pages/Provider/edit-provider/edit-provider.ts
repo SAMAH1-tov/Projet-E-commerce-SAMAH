@@ -5,6 +5,8 @@ import { Provider } from '../../../models/provider';
 import { ProviderService } from '../../../Services/provider-service';
 import { SideBar } from "../../comp/side-bar/side-bar";
 import { CommonModule } from '@angular/common';
+import { Product } from '../../../models/product';
+import { ProductService } from '../../../Services/product-service';
 
 @Component({
   selector: 'app-edit-provider',
@@ -19,8 +21,13 @@ import { CommonModule } from '@angular/common';
 })
 export class EditProvider implements OnInit {
   form: FormGroup;
+  productForm: FormGroup;
   provider!: Provider;
   isLoading: boolean = true;
+  allProducts: Product[] = [];
+  availableProducts: Product[] = [];
+  assignedProducts: Product[] = [];
+  showProductAssignment: boolean = false;
 
   constructor(
     private router: Router,
@@ -28,10 +35,13 @@ export class EditProvider implements OnInit {
     private formBuilder: FormBuilder,
     public actRoute: ActivatedRoute,
     private providerService: ProviderService,
+    private productService: ProductService,
   ) {}
 
   ngOnInit(): void {
     this.loadProvider();
+    this.loadAllProducts();
+    this.initProductForm();
   }
 
   initForm(): void {  
@@ -46,12 +56,20 @@ export class EditProvider implements OnInit {
     });
   }
 
+  initProductForm(): void {
+    this.productForm = this.formBuilder.group({
+      productId: [null, Validators.required]
+    });
+  }
+
   loadProvider(): void {
     const id = this.actRoute.snapshot.paramMap.get('id');
     if (id) {
       this.providerService.findById(id).subscribe({
         next: (data) => {
           this.provider = data;
+          this.assignedProducts = data.products || [];
+          this.updateAvailableProducts();
           this.initForm();
           this.isLoading = false;
           console.log('Provider loaded:', data);
@@ -63,6 +81,51 @@ export class EditProvider implements OnInit {
           this.cdRef.detectChanges();
         }
       });
+    }
+  }
+
+  loadAllProducts(): void {
+    this.productService.findAll().subscribe({
+      next: (data: Product[]) => {
+        this.allProducts = data;
+        this.updateAvailableProducts();
+      },
+      error: (error: any) => {
+        console.error('Error loading products:', error);
+      }
+    });
+  }
+
+  updateAvailableProducts(): void {
+    this.availableProducts = this.allProducts.filter(product => 
+      !this.assignedProducts.some(assigned => assigned.id === product.id)
+    );
+  }
+
+  toggleProductAssignment(): void {
+    this.showProductAssignment = !this.showProductAssignment;
+  }
+
+  assignProduct(): void {
+    if (this.productForm.invalid) {
+      return;
+    }
+
+    const productId = this.productForm.get('productId')?.value;
+    const selectedProduct = this.allProducts.find(p => p.id === productId);
+    
+    if (selectedProduct) {
+      this.assignedProducts.push(selectedProduct);
+      this.updateAvailableProducts();
+      this.productForm.get('productId')?.setValue(null);
+    }
+  }
+
+  removeProduct(product: Product): void {
+    const index = this.assignedProducts.findIndex(p => p.id === product.id);
+    if (index > -1) {
+      this.assignedProducts.splice(index, 1);
+      this.updateAvailableProducts();
     }
   }
 
@@ -81,6 +144,7 @@ export class EditProvider implements OnInit {
     this.provider.password = this.form.get('password')?.value;
     this.provider.company = this.form.get('company')?.value;
     this.provider.role = 'PROVIDER';
+    this.provider.products = this.assignedProducts;
 
     console.log('Updating provider payload:', this.provider);
 

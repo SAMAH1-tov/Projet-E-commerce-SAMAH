@@ -10,36 +10,36 @@
         <div class="col-md-3 mb-3">
           <div class="card text-white bg-primary">
             <div class="card-body">
-              <h5 class="card-title">Ventes Totales</h5>
-              <h3 class="card-text">{{ totalSales }} FCFA</h3>
-              <small>+{{ monthlyGrowth }}% ce mois</small>
+              <h5 class="card-title">Total Clients</h5>
+              <h3 class="card-text">{{ totalClients }}</h3>
+              <small>Nombre total de clients</small>
             </div>
           </div>
         </div>
         <div class="col-md-3 mb-3">
           <div class="card text-white bg-success">
             <div class="card-body">
-              <h5 class="card-title">Nouveaux Clients</h5>
-              <h3 class="card-text">{{ totalClients }}</h3>
-              <small>+8% ce mois</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 mb-3">
-          <div class="card text-white bg-info">
-            <div class="card-body">
-              <h5 class="card-title">Commandes</h5>
-              <h3 class="card-text">{{ totalOrders }}</h3>
-              <small>+15% ce mois</small>
+              <h5 class="card-title">Commandes Terminées</h5>
+              <h3 class="card-text">{{ completedOrders }}</h3>
+              <small>Livrées avec succès</small>
             </div>
           </div>
         </div>
         <div class="col-md-3 mb-3">
           <div class="card text-white bg-warning">
             <div class="card-body">
-              <h5 class="card-title">Taux de Satisfaction</h5>
-              <h3 class="card-text">{{ satisfactionRate }}%</h3>
-              <small>+2% ce mois</small>
+              <h5 class="card-title">Commandes en Cours</h5>
+              <h3 class="card-text">{{ pendingOrders }}</h3>
+              <small>En traitement</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card text-white bg-danger">
+            <div class="card-body">
+              <h5 class="card-title">Commandes Annulées</h5>
+              <h3 class="card-text">{{ cancelledOrders }}</h3>
+              <small>Annulées/rejetées</small>
             </div>
           </div>
         </div>

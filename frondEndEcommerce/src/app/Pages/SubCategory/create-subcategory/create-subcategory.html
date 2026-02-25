@@ -1,7 +1,9 @@
 <app-side-bar></app-side-bar>
 <div class="container w-100 col-10 justify-content-center pt-5 pb-5">
   
-  <a class="btn btn-primary justify-content-center align-items-center mb-4" href="subcategory-list" role="button"><img src="/icons/return-svgrepo-com.svg" alt="" width ="30px" height="30px"> Retour à la liste</a>
+  <a class="btn btn-primary justify-content-center align-items-center mb-4" href="subcategory-list" role="button">
+    <img src="/icons/return-svgrepo-com.svg" alt="" width="30px" height="30px"> Retour à la liste
+  </a>
 
   <div class="card mb-3 justify-content-center">
     <div class="row g-0">
@@ -13,27 +15,78 @@
           <h5 class="card-title">Ajouter une sous-catégorie</h5>
           <div class="card-text">
             <div class="container col-12 pt-4">
+              <!-- Message d'erreur -->
+              <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+                {{ errorMessage }}
+              </div>
+
+              <!-- Message si pas de catégories -->
+              <div *ngIf="categories.length === 0 && !isLoading" class="alert alert-warning" role="alert">
+                Aucune catégorie disponible. Veuillez d'abord créer une catégorie.
+              </div>
+
               <form [formGroup]="form" (ngSubmit)="createSubcategory()">
                 <div class="form-group">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Nom :</label>
-                        <input type="text" class="form-control" formControlName="name" placeholder="Entrez le nom de la sous-catégorie">
+                        <label for="name" class="form-label">Nom de la sous-catégorie :</label>
+                        <input 
+                          type="text" 
+                          class="form-control" 
+                          formControlName="name" 
+                          placeholder="Entrez le nom de la sous-catégorie"
+                          [class.is-invalid]="hasError('name', 'required') || hasError('name', 'minlength')"
+                        >
+                        <div class="invalid-feedback" *ngIf="hasError('name', 'required')">
+                          Le nom de la sous-catégorie est requis
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError('name', 'minlength')">
+                          Le nom doit contenir au moins 2 caractères
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description :</label>
-                        <input type="text" class="form-control" formControlName="description" placeholder="Entrez la description de la sous-catégorie">
+                        <textarea 
+                          class="form-control" 
+                          formControlName="description" 
+                          placeholder="Entrez la description de la sous-catégorie"
+                          rows="3"
+                          [class.is-invalid]="hasError('description', 'required') || hasError('description', 'minlength')"
+                        ></textarea>
+                        <div class="invalid-feedback" *ngIf="hasError('description', 'required')">
+                          La description est requise
+                        </div>
+                        <div class="invalid-feedback" *ngIf="hasError('description', 'minlength')">
+                          La description doit contenir au moins 5 caractères
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="category" class="form-label">Catégorie :</label>
-                        <select class="form-control" formControlName="category">
+                        <select 
+                          class="form-control" 
+                          formControlName="category"
+                          [class.is-invalid]="hasError('category', 'required')"
+                        >
                           <option [ngValue]="null">Sélectionner une catégorie</option>
                           @for (category of categories; track category.id) {
                             <option [ngValue]="category.id">{{category.name}}</option>
                           }
                         </select>
+                        <div class="invalid-feedback" *ngIf="hasError('category', 'required')">
+                          Veuillez sélectionner une catégorie
+                        </div>
                     </div>
                     <div class="mb-3 w-100 d-flex justify-content-center">
-                      <button type="submit" class="btn btn-primary btn-lg mt-3 mb-2 col-8">Ajouter une sous-catégorie</button>
+                      <button 
+                        type="submit" 
+                        class="btn btn-primary btn-lg mt-3 mb-2 col-8"
+                        [disabled]="form.invalid || isLoading || categories.length === 0"
+                      >
+                        <span *ngIf="!isLoading">Ajouter une sous-catégorie</span>
+                        <span *ngIf="isLoading">
+                          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          Création en cours...
+                        </span>
+                      </button>
                     </div>
                 </div>
               </form>
@@ -43,5 +96,4 @@
       </div>
     </div>
   </div>
-
 </div>

@@ -1,5 +1,4 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Product } from '../../../models/product';
@@ -7,6 +6,8 @@ import { ProductService } from '../../../Services/product-service';
 import { Gallery } from '../../../models/gallery';
 import { GalleryService } from '../../../Services/gallery-service';
 import { SideBar } from "../../comp/side-bar/side-bar";
+import { SubCategory } from '../../../models/sub-category';
+import { SubcategoryService } from '../../../Services/subcategory-service';
 
 @Component({
   selector: 'app-create-product',
@@ -16,20 +17,22 @@ import { SideBar } from "../../comp/side-bar/side-bar";
     SideBar
 ],
   templateUrl: './create-product.html',
-  styleUrl: './create-product.css',
+  styleUrls: ['./create-product.css'],
 })
 export class CreateProduct implements OnInit {
   product: Product;
   form: FormGroup;
   selectedFile!: File;
   previewUrl: any;
+  subcategories: SubCategory[] = [];
 
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
     private router: Router,
     private galleryService: GalleryService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private subcategoryService: SubcategoryService
   ) 
   {
 
@@ -43,13 +46,28 @@ export class CreateProduct implements OnInit {
       url_photo: [null, Validators.required],
       provider : [null, Validators.required],
       orders : [null, Validators.required],
-      subcategory : [null, Validators.required]
+      subcategoryId: [null, Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.product = new Product();
     this.initForm();
+    this.loadSubcategories();
+  }
+
+  loadSubcategories(): void {
+    this.subcategoryService.findAll().subscribe({
+      next: (data: SubCategory[]) => {
+        console.log('Subcategories loaded:', data);
+        this.subcategories = data;
+        this.cdRef.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des sous-catégories:', err);
+        this.cdRef.detectChanges();
+      }
+    });
   }
 
   onFileSelected(event: any) {
@@ -61,7 +79,6 @@ export class CreateProduct implements OnInit {
     }
   }
 
-
   createProduct(): void {
     const product = new Product();
     product.ref = this.form.get('ref')?.value;
@@ -70,7 +87,12 @@ export class CreateProduct implements OnInit {
     product.quantity = this.form.get('quantity')?.value;
     product.provider = this.form.get('provider')?.value;
     product.orders = this.form.get('orders')?.value;
-    product.subcategory = this.form.get('subcategory')?.value;
+
+    // Assigner la sous-catégorie sélectionnée
+    const subcategoryId = this.form.get('subcategoryId')?.value;
+    if (subcategoryId) {
+      product.subcategory = this.subcategories.find(sc => sc.id === subcategoryId);
+    }
 
     if (this.selectedFile) {
       const gallery = new Gallery();

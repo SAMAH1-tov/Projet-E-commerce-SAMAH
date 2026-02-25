@@ -1,5 +1,6 @@
 package com.smh.Backend_E_commerce.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class SubCategory {
 
     @ManyToOne
     @JoinColumn(name="category_id")
+    @JsonIgnore // Empêche la boucle infinie lors de la sérialisation JSON
     private Category category;
 
     @OneToMany(mappedBy = "subcategory", cascade = CascadeType.ALL)

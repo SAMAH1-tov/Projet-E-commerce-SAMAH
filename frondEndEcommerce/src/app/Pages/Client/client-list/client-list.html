@@ -12,37 +12,32 @@
         <input type="text" class="form-control" placeholder="Rechercher par nom, prénom ou email" aria-label="Rechercher un client" (keyup)="filterByName($event.target.value)">
         <button class="btn btn-outline-secondary bg-success" type="button"><img src="/icons/search-svgrepo-com.svg" width ="30px" height="30px" style="filter: invert(1);"></button>
       </div>
-      
-      <table class="table mt-4 table-bordered p-5">
-        <thead>
-        <tr>
-          <th scope="col">Prénom</th>
-          <th scope="col">Nom</th>
-          <th scope="col">Email</th>
-          <th scope="col">Téléphone</th>
-          <th scope="col">Localisation</th>
-          <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
+        <div class="d-flex justify-content-center row-cols-2 gap-1">
           @for (client of filteredClients; track client.id) {
-            <tr>
-              <td>{{ client.firstName }}</td>
-              <td>{{ client.lastName }}</td>
-              <td>{{ client.email }}</td>
-              <td>{{ client.phone }}</td>
-              <td>{{ client.localization }}</td>
-              <td>
-                <div class="d-flex justify-content-center gap-3">
-                  <a class="btn btn-warning btn-sm mt-3" (click)="updateClient(client.id)" role="button">
-                    <img src="/icons/edit-svgrepo-com.svg" width="16px" height="16px"> Modifier
-                  </a>
-                  <a class="btn btn-danger btn-sm mt-3" role="button" data-bs-toggle="modal" [attr.data-bs-target]="'#DeleteClient' + client.id">
-                    <img src="/icons/delete-svgrepo-com.svg" width="16px" height="16px"> Supprimer
-                  </a>
+
+              <div class="card mb-3 col col-6" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4 bg-dark rounded d-flex align-items-center justify-content-center">
+                    <img src="/icons/user-svgrepo-com.svg" class="img-fluid  w-100" alt="..." >
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ client.firstName }} {{ client.lastName }}</h5>
+                      <p class="card-text">{{ client.email }}</p>
+                      <p class="card-text"><small class="text-body-secondary">{{ client.phone }} - {{ client.localization }} </small></p>
+                    </div>
+                      <div class="d-flex justify-content-center gap-3 pb-3 ">
+                        <a class="btn btn-warning btn-sm mt-3" (click)="updateClient(client.id)" role="button">
+                          <img src="/icons/edit-svgrepo-com.svg" width="16px" height="16px"> Modifier
+                        </a>
+                        <a class="btn btn-danger btn-sm mt-3" role="button" data-bs-toggle="modal" [attr.data-bs-target]="'#DeleteClient' + client.id">
+                          <img src="/icons/delete-svgrepo-com.svg" width="16px" height="16px"> Supprimer
+                        </a>
+                      </div>
+                  </div>
                 </div>
-              </td>
-            </tr>
+            </div>
+
             <div class="modal fade" [id]="'DeleteClient' + client.id" tabindex="-1" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -62,12 +57,10 @@
             </div>
           }
           @empty {
-            <tr>
-              <td colspan="6">Aucun client disponible</td>
-            </tr>
+            Aucun client disponible
+
           }
-        </tbody>
-      </table>
+       </div>
     </div>
   </div>
 </div>

@@ -12,7 +12,6 @@ import { ClientsService } from '../../../Services/clients-service';
 import { DriverService } from '../../../Services/driver-service';
 import { Driver } from '../../../models/driver';
 
-
 @Component({
   selector: 'app-create-order',
   imports: [
@@ -48,12 +47,15 @@ export class CreateOrder implements OnInit {
     this.order = new Order();
     this.loadProducts();
     this.loadClients();
+    this.loadDrivers();
     this.initForm();
   }
 
   loadProducts(): void {
+    console.log('Loading products...');
     this.productService.findAll().subscribe({
       next: (data: Product[]) => {
+        console.log('Products loaded:', data);
         this.products = data;
       },
       error: (error: any) => {
@@ -63,8 +65,10 @@ export class CreateOrder implements OnInit {
   }
 
   loadClients(): void {
+    console.log('Loading clients...');
     this.clientService.findAll().subscribe({
       next: (data: Client[]) => {
+        console.log('Clients loaded:', data);
         this.clients = data;
       },
       error: (error: any) => {
@@ -72,11 +76,17 @@ export class CreateOrder implements OnInit {
       }
     });
   }
+
   loadDrivers(): void {
+    console.log('Loading drivers...');
     this.driverService.findAll().subscribe({
       next: (data) => {
+        console.log('Drivers loaded:', data);
         this.drivers = data;
       },
+      error: (error: any) => {
+        console.error('Error loading drivers:', error);
+      }
     });
   }
 
@@ -89,7 +99,7 @@ export class CreateOrder implements OnInit {
       description: [null, Validators.required],
       state: [null, Validators.required],
       products: this.productsArray,
-      driver: this.driversArray
+      driver: [null] 
     });
   }
 
@@ -161,12 +171,16 @@ export class CreateOrder implements OnInit {
     order.quantity_total = totals.totalQuantity;
     order.price_total = totals.totalPrice;
 
+    console.log('Creating order with data:', order);
+
     this.orderService.save(order).subscribe({
       next: (response: any) => {
+        console.log('Order created successfully:', response);
         this.router.navigate(['order-list']);
       },
       error: (error: any) => {
         console.error('Error creating order:', error);
+        alert('Erreur lors de la création de la commande: ' + (error.message || 'Erreur inconnue'));
       }
     });
   }

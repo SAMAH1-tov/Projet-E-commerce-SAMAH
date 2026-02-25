@@ -8,6 +8,8 @@ import { ChartConfiguration, ChartType, ChartOptions } from 'chart.js';
 import { OrderService } from '../../Services/order-service';
 import { ClientsService } from '../../Services/clients-service';
 import { ProductService } from '../../Services/product-service';
+import { AuthService } from '../../Services/auth-service';
+import { UserService } from '../../Services/user-service';
 import { Order } from '../../models/order';
 import { Client } from '../../models/client';
 import { Product } from '../../models/product';
@@ -32,6 +34,11 @@ export class Dashboard implements OnInit {
   totalProducts: number = 0;
   satisfactionRate: number = 0;
   monthlyGrowth: number = 0;
+  
+  // Statistiques des commandes par statut
+  completedOrders: number = 0;
+  pendingOrders: number = 0;
+  cancelledOrders: number = 0;
   
   // Line Chart Data
   public lineChartData: ChartConfiguration['data'] = {
@@ -125,7 +132,10 @@ export class Dashboard implements OnInit {
   constructor(
     private orderService: OrderService,
     private clientService: ClientsService,
-    private productService: ProductService
+    private productService: ProductService,
+    private authService: AuthService,
+    private router: Router,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -170,12 +180,39 @@ export class Dashboard implements OnInit {
     this.totalOrders = this.orders.length;
     this.totalSales = this.orders.reduce((sum, order) => sum + (order.price_total || 0), 0);
     
-    // Calculer le taux de satisfaction (simulation basée sur les états des commandes)
-    const completedOrders = this.orders.filter(order => order.state === 'completed' || order.state === 'delivered').length;
-    this.satisfactionRate = this.totalOrders > 0 ? Math.round((completedOrders / this.totalOrders) * 100) : 0;
+    // Calculer les commandes par statut
+    this.completedOrders = this.orders.filter(order => 
+      order.state === 'completed' || 
+      order.state === 'delivered' || 
+      order.state === 'terminée' ||
+      order.state === 'livrée'
+    ).length;
+    
+    this.pendingOrders = this.orders.filter(order => 
+      order.state === 'pending' || 
+      order.state === 'processing' || 
+      order.state === 'en cours' ||
+      order.state === 'en attente'
+    ).length;
+    
+    this.cancelledOrders = this.orders.filter(order => 
+      order.state === 'cancelled' || 
+      order.state === 'annulée' ||
+      order.state === 'rejected'
+    ).length;
+    
+    // Calculer le taux de satisfaction (basé sur les commandes terminées)
+    this.satisfactionRate = this.totalOrders > 0 ? Math.round((this.completedOrders / this.totalOrders) * 100) : 0;
     
     // Calculer la croissance mensuelle (simulation)
     this.monthlyGrowth = Math.round(Math.random() * 20); // Simulation de 0-20%
+    
+    console.log('Order statistics:', {
+      total: this.totalOrders,
+      completed: this.completedOrders,
+      pending: this.pendingOrders,
+      cancelled: this.cancelledOrders
+    });
   }
 
   updateChartData(): void {

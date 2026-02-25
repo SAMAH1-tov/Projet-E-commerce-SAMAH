@@ -79,6 +79,90 @@
                         </div>
                     </div>
 
+                    <!-- Product Assignment Toggle -->
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-info w-100" (click)="toggleProductAssignment()">
+                            <img src="/icons/package-svgrepo-com.svg" width="20px" height="20px" style="filter: invert(1);"> 
+                            {{ showProductAssignment ? 'Masquer' : 'Afficher' }} l'assignation de produits
+                        </button>
+                    </div>
+
+                    <!-- Product Assignment Section -->
+                    @if (showProductAssignment) {
+                        <div class="border border-info rounded p-3 mb-3 bg-light">
+                            <h6 class="text-primary mb-3">Assignation de produits au fournisseur</h6>
+                            
+                            <!-- Assign Product Form -->
+                            <div class="row mb-3">
+                                <div class="col-md-8">
+                                    <label class="form-label">Assigner un produit:</label>
+                                    <form [formGroup]="productForm">
+                                        <select class="form-control" formControlName="productId">
+                                            <option value="">-- Sélectionnez un produit --</option>
+                                            <option *ngFor="let product of availableProducts" [value]="product.id">
+                                                {{ product.ref }} (Stock: {{ product.quantity}})
+                                            </option>
+                                        </select>
+                                    </form>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button type="button" class="btn btn-success w-100" (click)="assignProduct()" [disabled]="availableProducts.length === 0">
+                                        <img src="/icons/add-svgrepo-com.svg" width="16px" height="16px" style="filter: invert(1);"> Assigner
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Assigned Products Table -->
+                            @if (assignedProducts.length > 0) {
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-sm">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>Référence</th>
+                                                <th>Description</th>
+                                                <th>Stock</th>
+                                                <th>Prix</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (product of assignedProducts; track product.id) {
+                                                <tr>
+                                                    <td>{{ product.ref }}</td>
+                                                    <td>{{ product.description ? (product.description | slice:0:30) + '...' : '-' }}</td>
+                                                    <td>{{ product.quantity }}</td>
+                                                    <td>{{ product.price }} FCFA</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger btn-sm" (click)="removeProduct(product)">
+                                                            <img src="/icons/delete-svgrepo-com.svg" width="14px" height="14px"> Retirer
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            } @else {
+                                <div class="alert alert-warning">
+                                    <small>Aucun produit assigné à ce fournisseur.</small>
+                                </div>
+                            }
+
+                            @if (availableProducts.length === 0 && assignedProducts.length > 0) {
+                                <div class="alert alert-info mt-2">
+                                    <small>Tous les produits disponibles sont déjà assignés à ce fournisseur.</small>
+                                </div>
+                            }
+
+                            <div class="alert alert-info mt-2">
+                                <small>
+                                    <strong>Produits assignés:</strong> {{ assignedProducts.length }} | 
+                                    <strong>Disponibles:</strong> {{ availableProducts.length }}
+                                </small>
+                            </div>
+                        </div>
+                    }
+
                     <div class="mb-3 w-100 d-flex justify-content-center">
                       <button type="submit" class="btn btn-primary btn-lg mt-3 mb-2 col-8" [disabled]="form.invalid">
                         Ajouter un Fournisseur

@@ -6,6 +6,8 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import { SideBar } from "../../comp/side-bar/side-bar";
 import { Gallery } from '../../../models/gallery';
 import { GalleryService } from '../../../Services/gallery-service';
+import { SubCategory } from '../../../models/sub-category';
+import { SubcategoryService } from '../../../Services/subcategory-service';
 
 @Component({
   selector: 'app-edit-product',
@@ -22,6 +24,7 @@ export class EditProduct implements OnInit {
   form: FormGroup;
   selectedFile!: File;
   previewUrl: any;
+  subcategories: SubCategory[] = [];
 
   constructor(
     private productService: ProductService,
@@ -30,10 +33,23 @@ export class EditProduct implements OnInit {
     private formBuilder: FormBuilder,
     public actRoute: ActivatedRoute,
     private galleryService: GalleryService,
+    private subcategoryService: SubcategoryService,
   ) {}
 
   ngOnInit(): void {
     this.loadProduct();
+    this.loadSubcategories();
+  }
+
+  loadSubcategories(): void {
+    this.subcategoryService.findAll().subscribe({
+      next: (data: SubCategory[]) => {
+        this.subcategories = data;
+      },
+      error: (error: any) => {
+        console.error('Error loading subcategories:', error);
+      }
+    });
   }
 
   loadProduct(): void {
@@ -56,7 +72,8 @@ export class EditProduct implements OnInit {
       description: [this.product.description, Validators.required],
       quantity: [this.product.quantity, [Validators.required, Validators.min(0)]],
       price: [this.product.price, [Validators.required, Validators.min(0)]],
-      url_photo: [null]
+      url_photo: [null],
+      subcategoryId: [this.product.subcategory?.id || null, Validators.required]
     });
   }
 
@@ -74,6 +91,13 @@ export class EditProduct implements OnInit {
     this.product.description = this.form.get('description')?.value;
     this.product.quantity = this.form.get('quantity')?.value;
     this.product.price = this.form.get('price')?.value;
+    
+    // Mettre à jour la sous-catégorie
+    const subcategoryId = this.form.get('subcategoryId')?.value;
+    if (subcategoryId) {
+      this.product.subcategory = this.subcategories.find(sc => sc.id === subcategoryId);
+    }
+    
     // if a new image was selected, create a gallery and upload image first
     if (this.selectedFile) {
       const gallery = new Gallery();

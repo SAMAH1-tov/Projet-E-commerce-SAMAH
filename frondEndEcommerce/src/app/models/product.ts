@@ -9,9 +9,9 @@ export class Product {
   description: string;
   quantity: number;
   price: number;
-  gallery: Gallery;
-  provider: Provider;
-  orders: Order;
-  subcategory: SubCategory;
+  gallery?: Gallery;
+  provider?: Provider;
+  orders?: Order;
+  subcategory?: SubCategory;
 
 }

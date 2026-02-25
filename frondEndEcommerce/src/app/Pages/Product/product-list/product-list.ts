@@ -4,6 +4,8 @@ import { NavBar } from "../../comp/nav-bar/nav-bar";
 import { SideBar } from "../../comp/side-bar/side-bar";
 import { Product } from '../../../models/product';
 import { ProductService } from '../../../Services/product-service';
+import { AuthService } from '../../../Services/auth-service';
+import { UserService } from '../../../Services/user-service';
 
 
 @Component({
@@ -20,11 +22,20 @@ export class ProductList implements OnInit {
  public constructor(
   private productService: ProductService,
   private cd: ChangeDetectorRef,
-  private router: Router) {
-  }
+  private router: Router,
+  private authService: AuthService,
+  private userService: UserService) {}
 
   ngOnInit(): void {
+    this.loadCurrentUser();
     this.loadProduct()
+  }
+
+  loadCurrentUser(): void {
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      this.userService.setCurrentUser(user);
+    }
   }
 
   loadProduct(): void {

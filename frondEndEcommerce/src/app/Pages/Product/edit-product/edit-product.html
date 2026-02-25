@@ -31,6 +31,22 @@
                         <input type="number" class="form-control" formControlName="quantity" placeholder="Entrez la quantité du produit">
                     </div>
                     <div class="mb-3">
+                        <label for="subcategory" class="form-label">Sous-catégorie :</label>
+                        <select class="form-control" formControlName="subcategoryId">
+                            <option value="">-- Sélectionnez une sous-catégorie --</option>
+                            @for (subcategory of subcategories; track subcategory.id) {
+                              <option [value]="subcategory.id">
+                                  {{ subcategory.name }}
+                              </option>
+                            }
+                            @empty {                 
+                                <option value="aucun">
+                                  aucune
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="url" class="form-label">Image du produit :</label>
                         <input type="file" class="form-control"  formControlName="url_photo" (change)="onFileSelected($event)">
                         <div class="mt-2">

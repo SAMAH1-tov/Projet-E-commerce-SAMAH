@@ -46,7 +46,7 @@
                           </small>
                         </p>
                         <div class="row row-cols-1 justify-content-center gap-1">
-                          <a class="btn btn-warning btn-sm" (click)="updateProvider(provider.id)" role="button">
+                          <a class="btn btn-warning btn-sm" href="edit-provider/{{ provider.id }}" role="button">
                             <img src="/icons/edit-svgrepo-com.svg" width="16px" height="16px"> Modifier
                           </a>
                           <a class="btn btn-danger btn-sm" role="button" data-bs-toggle="modal" [attr.data-bs-target]="'#DeleteProvider' + provider.id">

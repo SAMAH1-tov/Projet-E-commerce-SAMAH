@@ -50,11 +50,22 @@ public class AuthenticationService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(role);
+        
+        // Utilisation du username fourni par l'utilisateur
+        // Si aucun username n'est fourni, on peut utiliser l'email ou le prénom/nom par défaut
+        if (request.getUsername() != null && !request.getUsername().isEmpty()) {
+            user.setUsername(request.getUsername());
+        } else {
+            user.setUsername(request.getFirstName() + " " + request.getLastName());
+        }
 
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole().name())
                 .build();
     }
 
@@ -70,6 +81,9 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole().name())
                 .build();
     }
 }
